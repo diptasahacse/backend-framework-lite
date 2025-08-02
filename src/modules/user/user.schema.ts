@@ -25,3 +25,5 @@ export const UserTable = pgTable("users", {
   verifiedAt: timestamp("verified_at"),
   ...timestamps,
 });
+
+export type User = typeof UserTable.$inferSelect;

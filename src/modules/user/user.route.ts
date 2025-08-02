@@ -5,9 +5,9 @@ const UserRoutes = Router();
 const userController = new UserController();
 
 UserRoutes.get("/", userController.findAll);
-// UserRoutes.get("/:id", userController.getById);
-// UserRoutes.post("/", userController.create);
-// UserRoutes.put("/:id", userController.update);
-// UserRoutes.delete("/:id", userController.delete);
+UserRoutes.get("/:id", userController.findById);
+UserRoutes.post("/", userController.create);
+UserRoutes.put("/:id", userController.update);
+UserRoutes.delete("/:id", userController.delete);
 
 export default UserRoutes;

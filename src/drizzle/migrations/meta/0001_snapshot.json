@@ -1,6 +1,6 @@
 {
-  "id": "3ea863f8-518e-4140-823d-809ee9f442e5",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "4fb18734-72cc-499c-84d2-48c20f3bdff4",
+  "prevId": "3ea863f8-518e-4140-823d-809ee9f442e5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -78,15 +78,7 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "users_email_unique": {
-          "name": "users_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

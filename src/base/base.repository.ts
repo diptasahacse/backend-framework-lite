@@ -1,13 +1,34 @@
 // src/base/base.repository.ts
 import { db } from "@/drizzle/db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+
+interface PaginationOptions {
+  page?: number;
+  limit?: number;
+}
 
 export class BaseRepository<T, K extends keyof T> {
   constructor(protected table: any, protected primaryKey: K) {}
 
-  async findAll(): Promise<T[]> {
-    return db.select().from(this.table);
-  }
+  async findAll(paginationOptions?: PaginationOptions): Promise<{ data: T[]; total: number }> {
+  const page = paginationOptions?.page ?? 1;
+  const limit = paginationOptions?.limit ?? 10;
+  const offset = (page - 1) * limit;
+
+  const totalResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(this.table);
+
+  const total = Number(totalResult[0].count);
+
+  const data = await db
+    .select()
+    .from(this.table)
+    .limit(limit)
+    .offset(offset);
+
+  return { data, total };
+}
 
   async findById(id: T[K]): Promise<T | undefined> {
     const [item] = await db

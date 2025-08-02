@@ -1,33 +1,44 @@
+// src/base/base.service.ts
+import { BaseRepository } from "./base.repository";
+
+interface PaginationOptions {
+  page?: number;
+  limit?: number;
+}
+
 export class BaseService<T, K extends keyof T> {
-  protected repository: {
-    findAll: () => Promise<T[]>;
-    findById: (id: T[K]) => Promise<T | undefined>;
-    create: (data: Partial<T>) => Promise<T>;
-    update: (id: T[K], data: Partial<T>) => Promise<T | undefined>;
-    delete: (id: T[K]) => Promise<void>;
-  };
+  constructor(protected repository: BaseRepository<T, K>) {}
 
-  constructor(repository: typeof this.repository) {
-    this.repository = repository;
+  async findAll(paginationOptions?: PaginationOptions) {
+    const page = paginationOptions?.page ?? 1;
+    const limit = paginationOptions?.limit ?? 10;
+
+    const { data, total } = await this.repository.findAll({ page, limit });
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        lastPage: Math.ceil(total / limit),
+      },
+    };
   }
 
-  async getAll(): Promise<T[]> {
-    return this.repository.findAll();
-  }
-
-  async getById(id: T[K]): Promise<T | undefined> {
+  async findById(id: T[K]) {
     return this.repository.findById(id);
   }
 
-  async create(data: Partial<T>): Promise<T> {
+  async create(data: Partial<T>) {
     return this.repository.create(data);
   }
 
-  async update(id: T[K], data: Partial<T>): Promise<T | undefined> {
+  async update(id: T[K], data: Partial<T>) {
     return this.repository.update(id, data);
   }
 
-  async delete(id: T[K]): Promise<void> {
+  async delete(id: T[K]) {
     return this.repository.delete(id);
   }
 }

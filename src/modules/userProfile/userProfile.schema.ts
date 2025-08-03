@@ -19,3 +19,4 @@ export const UserProfileTable = pgTable("profiles", {
   bio: varchar("bio", { length: 1000 }), 
   ...timestamps,
 });
+export type UserProfile = typeof UserProfileTable.$inferSelect;
